@@ -8,11 +8,14 @@ $(document).ready(function() {
         xkey: 'date_',
         redraw: true,
         resize: true,
-        ykeys: ['total_net_tonnes', 'last_sale'],
+        ykeys: ['total_net_tonnes'],
         hideHover: 'auto',
         responsive:true,
-        labels: ['total_net_tonnes', 'last_sale'],
-        lineColors: ['#1de9b6', '#A389D4']
+        labels: ['total_net_tonnes'],
+        lineColors: ['#1de9b6'],
+        ymin : 1000,
+        ymax :1125,
+        pointSize : 0 
     });
 
 
