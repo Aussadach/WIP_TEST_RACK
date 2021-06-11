@@ -2,7 +2,7 @@ from flask import Flask ,render_template,url_for,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_socketio import SocketIO ,emit 
-
+from Model.Model import join_table
 
 app = Flask(__name__, template_folder="Views/templates/",static_url_path="",static_folder="Views/static")
 
