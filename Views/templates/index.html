@@ -44,11 +44,11 @@
     <nav class="pcoded-navbar">
         <div class="navbar-wrapper">
             <div class="navbar-brand header-logo">
-               <a href="index.html" class="b-brand">
+               <a href="/" class="b-brand">
                    <div class="b-bg">
                        <i class="feather icon-trending-up"></i>
                    </div>
-                   <span class="b-title">Datta Able</span>
+                   <span class="b-title">WIP Warehouse</span>
                </a>
                <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
            </div>
@@ -261,17 +261,24 @@
 
                                     </div>
                                     <div class="card-block">
+                                        <div class="Scan-Form">
+                                            <div class="Scan-Form-Input">
                                         <h5>แสกน Barocode บริเวณ Rack
                                         </h5>
                                         <label for="Rack-Barcode">Rack Barcode</label>
                                         <input type="text" class="form-control" id="Rack-Barcode" placeholder="Scan Rack" maxlength="7" autofocus>
                                     </br>
+                                        </div>
+
+                                        <div class="Scan-Form-Input">
                                         <h5>แสกน Barocode บริเวณกระบะ
                                         </h5>
-                                    
+
                                         <label for="Rack-Barcode">Lot Barcode</label>
                                         <input type="text" class="form-control" id="Rack-Barcode" placeholder="Scan Lot" maxlength="14">
                                     </br>
+                                    </div>
+                                            </div>
     
                                         <div class="col-md-12 text-center">
                                             <button type="button" class="btn btn-primary">Submit</button>
@@ -424,19 +431,26 @@
     <script src="{{ url_for('static',filename = 'template/assets/plugins/chart-morris/js/morris.min.js') }}"></script>
     <!-- <script src="{{ url_for('static',filename = 'JS/Chart_Moris.js') }}"></script> -->
     <script>
-         $(".form-control").keyup(function () {
-            if (this.value.length == this.maxLength) {
-                var $next = $(this).next('.form-control');
-                if ($next.length)
-                    $(this).next('.form-control').focus();
-                else
-                    $(this).blur();
+//          $(".form-control").keyup(function () {
+//             if (this.value.length == this.maxLength) {
+//                 var $next = $(this).next('.form-control');
+//                 if ($next.length)
+//                     $(this).next('.form-control').focus();
+//                 else
+//                     $(this).blur();
                     
-}
+// }
 
 
 
-            });
+//             });
+
+            $('.Scan-Form').on('keyup', '.Scan-Form-Input', function(e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    $(this).next().find('input[type=text]').focus();
+                }
+                });
 
 
     </script>
