@@ -1,6 +1,6 @@
 #import pandas as pd
-
-
+import pandas as pd
+import datetime as dt
 
 
 def join_table():
@@ -43,11 +43,6 @@ def upload_excel_pickle():
     pass
 
 
-import pandas as pd
-import datetime as dt
-
-
-
 def get_barcode_data(Path):
     try:
         Raw_Data = pd.read_excel(Path)
@@ -78,8 +73,6 @@ def get_barcode_data(Path):
     except:
         return pd.DataFrame()
     
-
-
 
 def get_card_info(lookup_data=[],df=[]):
     # print(Product_inf)
@@ -209,3 +202,7 @@ def get_card_info_for_update(lookup_data=[],df=[]):
     # Print the list 
 
     return Row_list
+
+
+
+
