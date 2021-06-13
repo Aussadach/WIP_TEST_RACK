@@ -54,7 +54,8 @@
                <a href="/" class="b-brand">
                 <div class="b-bg-icon">
                     <!-- <i class="feather icon-trending-up"></i> -->
-                    <img src="{{ url_for('static',filename = 'template/assets/images/warehouse.svg') }}" alt="Logo" class="logo-img"> 
+                    <!-- <img src="{{ url_for('static',filename = 'template/assets/images/warehouse.svg') }}" alt="Logo" class="logo-img"> -->
+                    <object data="{{ url_for('static',filename = 'template/assets/images/warehouse.svg') }}" > </object>
                 </div>
 
                 <span class="b-title">WIP Warehouse</span>
@@ -248,7 +249,7 @@
                                         <h5>แสกน Barocode บริเวณ Rack
                                         </h5>
                                         <label for="Rack-Barcode">Rack Barcode</label>
-                                        <input type="text" class="form-control" id="Rack-Barcode" placeholder="Scan Rack" maxlength="7" autofocus>
+                                        <input type="text" class="form-control" id="Rack-Barcode" placeholder="Scan Rack" maxlength="8" autofocus>
                                     </br>
                                         </div>
 
@@ -257,7 +258,7 @@
                                         </h5>
 
                                         <label for="Rack-Barcode">Lot Barcode</label>
-                                        <input type="text" class="form-control" id="Rack-Barcode" placeholder="Scan Lot" maxlength="14">
+                                        <input type="text" class="form-control" id="Lot-Barcode1" placeholder="Scan Lot" maxlength="14">
                                     </br>
                                     </div>
 
@@ -266,7 +267,7 @@
                                         </h5>
 
                                         <label for="Rack-Barcode">Lot Barcode</label>
-                                        <input type="text" class="form-control" id="Rack-Barcode" placeholder="Scan Lot" maxlength="14">
+                                        <input type="text" class="form-control" id="Lot-Barcode2" placeholder="Scan Lot" maxlength="14">
                                     </br>
                                     </div>
 
@@ -278,7 +279,7 @@
                                             </div>
     
                                         <div class="col-md-12 text-center">
-                                            <button type="button" class="btn btn-primary">Submit</button>
+                                            <button type="button" class="btn btn-primary" id="Submit_scan_in">Submit</button>
                                             <button type="button" class="btn btn-warning">Cancel</button>
                                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                                                 Launch demo modal
@@ -426,6 +427,7 @@
     <script src="{{ url_for('static',filename = 'template/assets/js/pcoded.min.js') }}"></script>
     <script src="{{ url_for('static',filename = 'template/assets/plugins/chart-morris/js/raphael.min.js') }}"></script>
     <script src="{{ url_for('static',filename = 'template/assets/plugins/chart-morris/js/morris.min.js') }}"></script>
+    <script src="{{ url_for('static',filename = 'JS/Rack_submit.js') }}"></script>
     <!-- <script src="{{ url_for('static',filename = 'JS/Chart_Moris.js') }}"></script> -->
     <script>
 //          $(".form-control").keyup(function () {
@@ -451,10 +453,10 @@
 
 
     </script>
-    <script>
+    <!-- <script>
         $('#exampleModalCenter').modal('show');
 
-    </script>
+    </script> -->
 
 </body>
 </html>
