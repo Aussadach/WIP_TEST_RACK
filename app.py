@@ -132,27 +132,30 @@ def handle_Rack():
 
 
     elif request.method == 'PUT':
-         
-         body = request.get_json()
-         if body is not None:
-            print(body)
-            Rack1 = body['Rack_Id'] + 'T'
-            Rack2 = body['Rack_Id'] + 'B'
-            Barcode1 = body['Up_Barcode']
-            Barcode2 = body['Down_Barcode']
-            Position1 = Test.query.filter_by(RACK_ID=Rack1).first()
-            Position1.Batch = Barcode1
-            Position2 = Test.query.filter_by(RACK_ID=Rack2).first()
-            Position2.Batch = Barcode2
-            db.session.commit()
+         try :
+            body = request.get_json()
+            if body is not None:
+                print(body)
+                Rack1 = body['Rack_Id'] + 'T'
+                Rack2 = body['Rack_Id'] + 'B'
+                Barcode1 = body['Up_Barcode']
+                Barcode2 = body['Down_Barcode']
+                Position1 = Test.query.filter_by(RACK_ID=Rack1).first()
+                Position1.Batch = Barcode1
+                Position2 = Test.query.filter_by(RACK_ID=Rack2).first()
+                Position2.Batch = Barcode2
+                db.session.commit()
 
-            # user = Test.query.get(5)
-            # user.name = 'New Name'
-            # db.session.commit()
-            
-            
-            return {"message" : "Got data" , "body" : body} , 200
-         
+                # user = Test.query.get(5)
+                # user.name = 'New Name'
+                # db.session.commit()
+                
+                
+                return {"message" : "Got data" , "body" : body} , 200
+
+         except Exception as e:
+
+            return {"error" : "Got error" , "body" : str(e)} , 404
 
     elif request.method == 'DELETE':
         Rack = request.args.get('Barcode')
