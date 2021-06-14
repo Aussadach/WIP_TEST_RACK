@@ -113,7 +113,7 @@ def test():
     try:
         data = Test.query.all()
         json_dat = [i.to_json() for i in data]
-        print(json_dat)
+        
         # print(json_dat)
         return jsonify(json_dat)
 
