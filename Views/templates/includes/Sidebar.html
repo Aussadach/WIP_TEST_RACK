@@ -1,0 +1,88 @@
+<nav class="pcoded-navbar">
+	<div class="navbar-wrapper">
+		<div class="navbar-brand header-logo">
+			<!-- <a href="/" class="b-brand">
+           <div class="b-bg">
+               <i class="feather icon-trending-up"></i>
+               <img src="{{ url_for('static',filename = 'template/assets/images/warehouse.svg') }}" alt="Logo" class="logo-img"> 
+           </div>
+           <span class="b-title">WIP Warehouse</span>
+       </a> -->
+			<a href="/" class="b-brand">
+				<div class="b-bg-icon">
+					<!-- <i class="feather icon-trending-up"></i> -->
+					<!-- <img src="{{ url_for('static',filename = 'template/assets/images/warehouse.svg') }}" alt="Logo" class="logo-img"> -->
+					<object
+						data="{{ url_for('static',filename = 'template/assets/images/warehouse.svg') }}"
+					></object>
+				</div>
+
+				<span class="b-title">WIP Warehouse</span>
+			</a>
+			<a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
+		</div>
+		<div class="navbar-content scroll-div">
+			<ul class="nav pcoded-inner-navbar">
+				<li class="nav-item pcoded-menu-caption">
+					<label>Navigation</label>
+				</li>
+				<li
+					data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+					class="nav-item"
+					id="Dashboard_Nav"
+				>
+					<a href="/" class="nav-link"
+						><span class="pcoded-micon"><i class="feather icon-home"></i></span
+						><span class="pcoded-mtext">Dashboard</span></a
+					>
+				</li>
+				<li
+					data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+					class="nav-item"
+					id="Load_Nav"
+				>
+					<a href="/" class="nav-link"
+						><span class="pcoded-micon"><i class="feather icon-log-in"></i></span
+						><span class="pcoded-mtext">Load Scan</span></a
+					>
+				</li>
+				<li
+					data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+					class="nav-item"
+					id="Unload_Nav"
+				>
+					<a href="/" class="nav-link"
+						><span class="pcoded-micon"><i class="feather icon-log-out"></i></span
+						><span class="pcoded-mtext">Unload Scan</span></a
+					>
+				</li>
+				<li
+					data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+					class="nav-item"
+					id="Export_Nav"
+				>
+					<a href="/" class="nav-link"
+						><span class="pcoded-micon"><i class="feather icon-file-text"></i></span
+						><span class="pcoded-mtext">Export</span></a
+					>
+				</li>
+
+				<li
+					data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+					class="nav-item"
+					id="Export_Nav"
+				>
+					<a href="javascript:" class="full-screen" onclick="javascript:toggleFullScreen()">
+						<span class="pcoded-micon"><i class="feather icon-maximize"></i></span>
+						<span class="pcoded-mtext">Full Screen</span></a
+					>
+				</li>
+				<!-- <a
+                                href="javascript:"
+                                class="full-screen"
+                                onclick="javascript:toggleFullScreen()"
+                                > FullScreen</a> -->
+			</ul>
+		</div>
+	</div>
+</nav>

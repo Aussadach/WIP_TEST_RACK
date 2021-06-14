@@ -1,0 +1,189 @@
+{% extends "/base.html" %}
+
+
+{% block title %} WIP Warehouse {% endblock %} 
+
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <div class="page-header-title">
+                            <h5 class="m-b-10">Scan</h5>
+                        </div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/"><i class="feather icon-home"></i></a>
+                            </li>
+                            <li class="breadcrumb-item"><a href="javascript:">แสกนเข้า</a></li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class='row'>
+                    <div class='col-sm-12'>
+                        <div class="card">
+                        <div class='card-header'>
+                            <h4>Barcode Scanner</h4>
+
+                        </div>
+                        <div class="card-block">
+                            <div class="Scan-Form">
+                                <div class="Scan-Form-Input">
+                            <h5>แสกน Barocode บริเวณ Rack
+                            </h5>
+                            <label for="Rack-Barcode">Rack Barcode</label>
+                            <input type="text" class="form-control" id="Rack-Barcode" placeholder="Scan Rack" maxlength="8" autofocus>
+                        </br>
+                            </div>
+
+                            <div class="Scan-Form-Input">
+                            <h5>แสกน Barocode บริเวณกระบะบน
+                            </h5>
+
+                            <label for="Rack-Barcode">Lot Barcode</label>
+                            <input type="text" class="form-control" id="Lot-Barcode1" placeholder="Scan Lot" maxlength="14">
+                        </br>
+                        </div>
+
+                        <div class="Scan-Form-Input">
+                            <h5>แสกน Barocode บริเวณกระบะล่าง
+                            </h5>
+
+                            <label for="Rack-Barcode">Lot Barcode</label>
+                            <input type="text" class="form-control" id="Lot-Barcode2" placeholder="Scan Lot" maxlength="14">
+                        </br>
+                        </div>
+
+
+
+
+
+
+                                </div>
+
+                            <div class="col-md-12 text-center">
+                                <button type="button" class="btn btn-primary" id="Submit_scan_in">Submit</button>
+                                <button type="button" class="btn btn-warning">Cancel</button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                    Launch demo modal
+                                  </button>
+                            </div>
+                        </div>
+                        <div class="card-block">
+                            
+                        
+                        </div>
+                    </div>
+                </div>
+
+
+
+                </div>
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Hover Table</h5>
+                           
+                        </div>
+
+                        <div class="card-block">
+                            <div class="table-responsive" >
+                                <!-- <table class="display table nowrap table-striped table-hover" id="WIP_table" style="width:100%"> -->
+                               
+                                
+                                <!-- </table> -->
+                                <table class = "display table dt-responsive nowrap" id="WIP_table" style="width:100%"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                  <!-- Modal -->
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                            Scan ซ้ำกันกับ หมายเลข
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <!-- [ Main Content ] end -->
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+
+
+
+
+{% endblock content %}
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="{{ url_for('static',filename = 'JS/Rack_submit.js') }}"></script>
+<script src="{{ url_for('static',filename = 'JS/Rack_table.js') }}"></script>
+<script> 
+    // Make nav bar active
+    var element = document.getElementById("Load_Nav");
+    element.classList.add("active");
+
+</script>
+<script>
+
+    $(".Scan-Form").on("keyup", ".Scan-Form-Input", function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            $(this).next().find("input[type=text]").focus();
+        }
+    });
+</script>
+        <!-- <script>
+        $('#exampleModalCenter').modal('show');
+
+    </script> -->
+
+
+{% endblock javascripts %}

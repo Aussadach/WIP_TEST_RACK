@@ -163,9 +163,9 @@ $(document).ready(function () {
                              'csvHtml5',
                              'pdfHtml5'
                          ],
-            //scrollX: false,
+            scrollX: false,
             keys: true,
-            responsive: true
+            responsive: false
         } );   
             
     
