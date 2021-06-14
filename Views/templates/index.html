@@ -28,7 +28,10 @@
 
     <!-- morris css -->
     <link rel="stylesheet" href="{{ url_for('static',filename = 'template/assets/plugins/chart-morris/css/morris.css') }}">
-
+    
+    <!--Datatable-->
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'template/assets/plugins/data-tables/css/datatables.min.css') }}">
+    
 </head>
 
 <body>
@@ -300,15 +303,15 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h5>Hover Table</h5>
-                                        <span class="d-block m-t-5">use class <code>table-hover</code> inside table element</span>
+                                       
                                     </div>
-                                    <div class="card-block table-border-style">
+
+                                    <div class="card-block">
                                         <div class="table-responsive" >
-                                            <div class="dataTables_wrapper dt-bootstrap4" id="Rack_table">
-
-
-                                            </div>
-
+                                            <table class="display table nowrap table-striped table-hover" id="WIP_table" style="width:100%">
+                                            
+                                            
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -443,6 +446,8 @@
     <script src="{{ url_for('static',filename = 'template/assets/js/pcoded.min.js') }}"></script>
     <script src="{{ url_for('static',filename = 'template/assets/plugins/chart-morris/js/raphael.min.js') }}"></script>
     <script src="{{ url_for('static',filename = 'template/assets/plugins/chart-morris/js/morris.min.js') }}"></script>
+
+    <script src="{{ url_for('static',filename = 'template/assets/plugins/data-tables/js/datatables.min.js') }}"></script>
     <script src="{{ url_for('static',filename = 'JS/Rack_submit.js') }}"></script>
     <script src="{{ url_for('static',filename = 'JS/Rack_table.js') }}"></script> 
     <!-- <script src="{{ url_for('static',filename = 'JS/Chart_Moris.js') }}"></script> -->
