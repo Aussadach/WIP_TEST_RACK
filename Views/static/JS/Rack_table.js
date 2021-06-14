@@ -120,7 +120,7 @@
 
 $(document).ready(function () {
     
-    $.getJSON('http://127.0.0.1:5000/Test_db',function(result){
+    $.getJSON('/Test_db',function(result){
         // [ line-angle-chart ] end
     // [ line-smooth-chart ] start
         
@@ -163,8 +163,9 @@ $(document).ready(function () {
                              'csvHtml5',
                              'pdfHtml5'
                          ],
-            scrollX: true,
-            keys: true
+            //scrollX: false,
+            keys: true,
+            responsive: true
         } );   
             
     
