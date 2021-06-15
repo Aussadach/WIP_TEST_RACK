@@ -108,6 +108,22 @@ class Test(db.Model):
 def index():
     return render_template('Scan_in.html')
 
+@app.route('/Scan_out')
+def Scan_out():
+    return render_template('Scan_out.html')
+
+@app.route('/Scan_in')
+def Scan_in():
+    return render_template('Scan_in.html')
+
+@app.route('/Export')
+def Export():
+    return render_template('Export.html')
+
+@app.route('/Dashboard')
+def Dashboard():
+    return render_template('Dashboard.html')
+
 @app.route('/Test_db',methods=['GET'])
 def test():
     try:
@@ -163,8 +179,8 @@ def handle_Rack():
    
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    #app.run(host='10.120.3.96', port=5000)
+    #app.run(debug=True)
+    app.run(host='10.120.3.30', port=5000)
     #app.run(host='192.168.43.104', port=5000 )
     #app.run(host='192.168.43.104', port=5000, debug=True, threaded=False)
 

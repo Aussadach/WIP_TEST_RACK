@@ -126,6 +126,27 @@ $(document).ready(function () {
         
         data = result;
         
+        var ww = document.body.clientWidth;
+        resonsiveclass = "display table dt-responsive nowrap"
+        NormalClass = "display table nowrap table-striped table-hover"
+        
+        if (ww < 600) {
+
+            $('#WIP_table').removeClass(NormalClass);
+            $('#WIP_table').addClass(resonsiveclass);
+            table_responsive = true ;
+
+        } 
+        else if (ww >= 601) {
+
+            $('#WIP_table').removeClass(resonsiveclass);
+            $('#WIP_table').addClass(resonsiveclass);
+
+            table_responsive = false ;
+            
+        };
+
+
         $('#WIP_table').DataTable( {
             data: data,
             columns: [
@@ -158,22 +179,11 @@ $(document).ready(function () {
             ],
             dom: 'Bfrtip',
             buttons: [
-                             'copyHtml5',
-                             'excelHtml5',
-                             'csvHtml5',
-                             'pdfHtml5'
-                         ],
+                             'excelHtml5',],
             scrollX: false,
             keys: true,
-            responsive: false
+            responsive: table_responsive
         } );   
-            
-    
-    
-    
-    
-    
-    
-    })
+               })
 
 });

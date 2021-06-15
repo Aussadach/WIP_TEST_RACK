@@ -79,11 +79,10 @@
 				<a href="index.html" class="b-brand">
 					<div class="b-bg-icon">
 						<!-- <i class="feather icon-trending-up"></i> -->
-						<img
-							src="{{ url_for('static',filename = 'template/assets/images/warehouse.svg') }}"
-							alt="Logo"
-							class="logo-img"
-						/>
+						<object class="warehouse-icon"
+						data="{{ url_for('static',filename = 'template/assets/images/warehouse.svg') }}"
+						></object>
+
 					</div>
 					<span class="b-title">WIP Warehouse</span>
 				</a>
@@ -175,7 +174,13 @@
 		<script src="{{ url_for('static',filename = 'template/assets/plugins/chart-morris/js/raphael.min.js') }}"></script>
 		<script src="{{ url_for('static',filename = 'template/assets/plugins/chart-morris/js/morris.min.js') }}"></script>
 		<script src="{{ url_for('static',filename = 'template/assets/plugins/data-tables/js/datatables.min.js') }}"></script>
+		<script>
+		$(document).ready(function(){
 
+			$(".warehouse-icon").width($(".b-bg-icon").width());
+			$(".warehouse-icon").height($(".b-bg-icon").height());
+		
+		});</script>
 		<!-- Specific Page JS goes HERE  -->
 		{% block javascripts %}{% endblock javascripts %}
 	</body>

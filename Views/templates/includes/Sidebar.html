@@ -12,7 +12,7 @@
 				<div class="b-bg-icon">
 					<!-- <i class="feather icon-trending-up"></i> -->
 					<!-- <img src="{{ url_for('static',filename = 'template/assets/images/warehouse.svg') }}" alt="Logo" class="logo-img"> -->
-					<object
+					<object class="warehouse-icon"
 						data="{{ url_for('static',filename = 'template/assets/images/warehouse.svg') }}"
 					></object>
 				</div>
@@ -31,7 +31,7 @@
 					class="nav-item"
 					id="Dashboard_Nav"
 				>
-					<a href="/" class="nav-link"
+					<a href="/Dashboard" class="nav-link"
 						><span class="pcoded-micon"><i class="feather icon-home"></i></span
 						><span class="pcoded-mtext">Dashboard</span></a
 					>
@@ -41,7 +41,7 @@
 					class="nav-item"
 					id="Load_Nav"
 				>
-					<a href="/" class="nav-link"
+					<a href="/Scan_in" class="nav-link"
 						><span class="pcoded-micon"><i class="feather icon-log-in"></i></span
 						><span class="pcoded-mtext">Load Scan</span></a
 					>
@@ -51,7 +51,7 @@
 					class="nav-item"
 					id="Unload_Nav"
 				>
-					<a href="/" class="nav-link"
+					<a href="/Scan_out" class="nav-link"
 						><span class="pcoded-micon"><i class="feather icon-log-out"></i></span
 						><span class="pcoded-mtext">Unload Scan</span></a
 					>
@@ -61,7 +61,7 @@
 					class="nav-item"
 					id="Export_Nav"
 				>
-					<a href="/" class="nav-link"
+					<a href="/Export" class="nav-link"
 						><span class="pcoded-micon"><i class="feather icon-file-text"></i></span
 						><span class="pcoded-mtext">Export</span></a
 					>
