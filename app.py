@@ -1,9 +1,14 @@
-from flask import Flask ,render_template,url_for,jsonify,request
+from flask import Flask ,render_template,url_for,jsonify,request,redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_socketio import SocketIO ,emit 
 from Model.Model import join_table
- 
+import pandas as pd
+import os
+
+from werkzeug.utils import secure_filename
+
+
 app = Flask(__name__, template_folder="Views/templates/",static_url_path="",static_folder="Views/static")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://yrbojwilzbsaqq:05543744ad1f1feabe1f635b60c7468e95353970bad5bc0be0f76e34e4cf311a@ec2-3-215-57-87.compute-1.amazonaws.com:5432/d3p46mr282o2mq"
@@ -123,6 +128,8 @@ def Export():
 @app.route('/Dashboard')
 def Dashboard():
     return render_template('Dashboard.html')
+    
+
 
 @app.route('/Test_db',methods=['GET'])
 def test():
@@ -176,11 +183,83 @@ def handle_Rack():
     elif request.method == 'DELETE':
         Rack = request.args.get('Barcode')
 
-   
+@app.route('/uploadLabel',methods=[ "GET",'POST'])
+def uploadLabel():
+    isthisFile=request.files.get('file')
+    print(isthisFile)
+    #print(isthisFile.filename)
+    print(type(isthisFile))
+    #isthisFile.save("./"+isthisFile.filename)
+
+
+app.config["FILE_UPLOAD"] = r"/datta-able-bootstrap-dashboard/Views/static/uploaded_file"
+app.config["ALLOWED_FILE_EXTENSION"] = ["csv","xlsx","txt"]
+app.config["MAX_FILESIZE"] = 100*1024*1024
+
+def allowed_file(filename):
+
+    if not "." in filename:
+        return False
+
+    ext = filename.rsplit(".",1)[1]
+
+    if ext.upper() in app.config["ALLOWED_FILE_EXTENSION"]:
+        return True
+    else :
+        return False
+
+def allowed_file_filesize(filesize):
+
+    if int(filesize) < app.config["MAX_FILESIZE"]:
+        return True
+
+    else:
+        return False
+
+
+@app.route('/upload-file',methods=["GET","POST"])
+def upload_SAP():
+    if request.method == "POST":
+
+        if request.files:
+
+            if not allowed_file_filesize(request.cookies):
+                print("File exceed Max limit size")
+                return redirect(request.url)
+
+
+            print(request.cookies)
+
+            SAPfile = request.files["SAP"]
+
+            if SAPfile.filename == "":
+                print("Dont have file name")
+                return redirect(request.url)
+            if not allowed_file(SAPfile.filename):
+                print("Ext not allowed")
+                return redirect(request.url)
+
+            else:
+                filename = secure_filename(SAPfile.filename)
+                #SAPfile.save(os.path.join(app.config["FILE_UPLOAD"]),filename)
+                print(SAPfile)
+                print(os.path.join(app.config["FILE_UPLOAD"]))
+                A = pd.read_excel(SAPfile)
+                print(A.head())
+            
+            
+           
+            print("Image saved")
+
+
+            return redirect(request.url)
+
+
+    return render_template('Upload_SAP.html')
 
 if __name__ == '__main__':
-    #app.run(debug=True)
-    app.run(host='10.120.3.30', port=5000)
+    app.run(debug=True)
+    #app.run(host='10.120.3.30', port=5000)
     #app.run(host='192.168.43.104', port=5000 )
     #app.run(host='192.168.43.104', port=5000, debug=True, threaded=False)
 
