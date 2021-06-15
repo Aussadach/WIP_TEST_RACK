@@ -163,8 +163,8 @@ def handle_Rack():
    
 
 if __name__ == '__main__':
-    #app.run(debug=True)
+    app.run(debug=True)
     #app.run(host='10.120.3.96', port=5000)
-    app.run(host='192.168.43.104', port=5000 )
+    #app.run(host='192.168.43.104', port=5000 )
     #app.run(host='192.168.43.104', port=5000, debug=True, threaded=False)
 

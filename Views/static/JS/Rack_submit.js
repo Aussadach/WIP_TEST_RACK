@@ -1,4 +1,7 @@
 
+
+
+
 $(document).ready(function(){
     // click on button submit
     $("#Submit_scan_in").on('click', function(){
@@ -12,6 +15,8 @@ $(document).ready(function(){
             
           };
         console.log(JSON.stringify(data))
+        $('#exampleModalCenter').modal('show');
+        
 
         $.ajax({
             type: 'PUT',
@@ -20,10 +25,13 @@ $(document).ready(function(){
             dataType: "json",
             contentType: 'application/json',
             success: function(result) {
-        
+                
                 console.log(result)
+                $('#exampleModalCenter').modal('hide');
                // result from server
+                $('#Success_Modal').modal('show');
             }
+
         });
 
 
