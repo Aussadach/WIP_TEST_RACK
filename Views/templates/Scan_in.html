@@ -52,6 +52,7 @@
                                 <div class="Scan-Form-Input">
                             <h5>แสกน Barocode บริเวณ Rack
                             </h5>
+                            <form>
                             <label for="Rack-Barcode">Rack Barcode</label>
                             <input type="text" class="form-control" id="Rack-Barcode" placeholder="Scan Rack" maxlength="8" autofocus>
                         </br>
@@ -84,44 +85,22 @@
 
                             <div class="col-md-12 text-center">
                                 <button type="button" class="btn btn-primary" id="Submit_scan_in">Submit</button>
-                                <button type="button" class="btn btn-warning">Clear</button>
+                                <button type="reset" class="btn btn-warning" >Clear</button>
                                 <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                                     Launch demo modal
                                   </button> -->
                                 
                             </div>
                         </div>
-                        <div class="card-block">
-                            
+                    </form>
                         
-                        </div>
                     </div>
                 </div>
 
 
 
                 </div>
-                <div class="row">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>WIP Warehouse</h5>
-                           
-                        </div>
-
-                        <div class="card-block">
-                            <div class="table-responsive" >
-                                <!-- <table class="display table nowrap table-striped table-hover" id="WIP_table" style="width:100%"> -->
-                               
-                                
-                                <!-- </table> -->
-                                <table class = "display table dt-responsive nowrap" id="WIP_table" style="width:100%"></table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                </div>
+                
 
                   <!-- Modal -->
                     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -229,7 +208,7 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script src="{{ url_for('static',filename = 'JS/Rack_submit.js') }}"></script>
-<script src="{{ url_for('static',filename = 'JS/Rack_table.js') }}"></script>
+
 <script> 
     // Make nav bar active
     var element = document.getElementById("Load_Nav");
