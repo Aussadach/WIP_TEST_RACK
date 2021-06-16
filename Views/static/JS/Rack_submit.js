@@ -1,7 +1,3 @@
-
-
-
-
 $(document).ready(function(){
     // click on button submit
     $("#Submit_scan_in").on('click', function(){

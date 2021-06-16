@@ -19,7 +19,6 @@ db = SQLAlchemy(app)
 # db.init_app(app)
 
 migrate = Migrate(app, db)
-
 socketio = SocketIO(app)
 
 class Test(db.Model):
@@ -146,6 +145,9 @@ def test():
 
         return hed+error_text
         
+
+
+
 @app.route('/Rack', methods=['GET', 'PUT', 'DELETE'])
 def handle_Rack():
 
@@ -163,10 +165,14 @@ def handle_Rack():
                 Rack2 = body['Rack_Id'] + 'B'
                 Barcode1 = body['Up_Barcode']
                 Barcode2 = body['Down_Barcode']
+
                 Position1 = Test.query.filter_by(RACK_ID=Rack1).first()
-                Position1.Batch = Barcode1
+                Position1.Batch = Barcode1 
                 Position2 = Test.query.filter_by(RACK_ID=Rack2).first()
                 Position2.Batch = Barcode2
+
+
+
                 db.session.commit()
 
                 # user = Test.query.get(5)
@@ -183,6 +189,42 @@ def handle_Rack():
     elif request.method == 'DELETE':
         Rack = request.args.get('Barcode')
 
+
+
+@app.route('/Check_Rack_Empty', methods=['GET'])
+def Check_Rack_Empty():
+        try :
+            body = request.get_json()
+            Rack1 = body['Rack_Id'] + 'T'
+            Rack2 = body['Rack_Id'] + 'B'
+            Position1 = Test.query.filter_by(RACK_ID=Rack1).first()
+            Position2 = Test.query.filter_by(RACK_ID=Rack2).first()
+
+            if Position1.Batch == "":
+                Pos1_empty = True
+            else :
+                Pos1_empty = False
+            if Position2.Batch == "":
+                Pos2_empty = True
+            else :
+                Pos2_empty = False
+
+            res = { "Upper_Post_Empty" : Pos1_empty,
+            
+                    "Lower_Post_Empty" : Pos2_empty
+
+            }
+
+            return {"message" : "Got data" , "res" : res} , 200
+
+
+        except Exception as e:
+            return {"error" : "Got error" , "body" : str(e)} , 404
+
+
+
+
+
 @app.route('/uploadLabel',methods=[ "GET",'POST'])
 def uploadLabel():
     isthisFile=request.files.get('file')
@@ -192,8 +234,8 @@ def uploadLabel():
     #isthisFile.save("./"+isthisFile.filename)
 
 
-app.config["FILE_UPLOAD"] = r"datta-able-bootstrap-dashboard\Views\uploaded_file"
-app.config["ALLOWED_FILE_EXTENSION"] = ["CSV","XLSX","TXT"]
+app.config["FILE_UPLOAD"] = r"datta-able-bootstrap-dashboard\FileStorage"
+app.config["ALLOWED_FILE_EXTENSION"] = ["CSV","XLSX"]
 app.config["MAX_FILESIZE"] = 100*1024*1024
 
 def allowed_file(filename):
@@ -244,17 +286,28 @@ def upload_SAP():
 
             else:
 
-                filename = secure_filename(SAPfile.filename)
-                print(os.path.join(app.config["FILE_UPLOAD"],filename))
-                SAPfile.save(os.path.join(app.config["FILE_UPLOAD"],filename))
-                print(SAPfile)
-                
-                # A = pd.read_excel(SAPfile)
-                # print(A.head())
+                # filename = secure_filename(SAPfile.filename)
+                # #print(os.path.join(app.config["FILE_UPLOAD"],filename))
+                # SAPfile.save(os.path.join(app.config["FILE_UPLOAD"],filename))
+                # print(SAPfile)
+                ext = SAPfile.filename.rsplit(".",1)[1]
+                if ext.upper() == "XLSX":
+                    SAP_df = pd.read_excel(SAPfile)
+                    SAP_df.to_pickle(os.path.join(app.config["FILE_UPLOAD"],"SAP_df_pickle.pkl"))
+                    print("SAP_data saved")
+
+                    return {"message" : "Success"} , 200
+
+                elif ext.upper() == "CSV":
+                    SAP_df = pd.read_csv(SAPfile)
+                    SAP_df.to_pickle(os.path.join(app.config["FILE_UPLOAD"],"SAP_df_pickle.pkl"))
+                    print("SAP_data saved")
+
+                    return {"message" : "Success"} , 200
+                else :
+                    print("Failed")
+                    
             
-            
-           
-            print("Image saved")
 
 
             return redirect(request.url)
