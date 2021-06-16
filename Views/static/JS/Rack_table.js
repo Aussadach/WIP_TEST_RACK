@@ -145,7 +145,7 @@ $(document).ready(function () {
             table_responsive = false ;
             
         };
-
+        // Setup - add a text input to each footer cell
 
         $('#WIP_table').DataTable( {
             data: data,
@@ -182,8 +182,17 @@ $(document).ready(function () {
                              'excelHtml5',],
             scrollX: false,
             keys: true,
-            responsive: table_responsive
+            fixedHeader: false,
+            
+            
+            responsive: table_responsive,
+            
+            
         } );   
                })
+
+            
+            
+        
 
 });

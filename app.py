@@ -192,8 +192,8 @@ def uploadLabel():
     #isthisFile.save("./"+isthisFile.filename)
 
 
-app.config["FILE_UPLOAD"] = r"/datta-able-bootstrap-dashboard/Views/static/uploaded_file"
-app.config["ALLOWED_FILE_EXTENSION"] = ["csv","xlsx","txt"]
+app.config["FILE_UPLOAD"] = r"datta-able-bootstrap-dashboard\Views\uploaded_file"
+app.config["ALLOWED_FILE_EXTENSION"] = ["CSV","XLSX","TXT"]
 app.config["MAX_FILESIZE"] = 100*1024*1024
 
 def allowed_file(filename):
@@ -219,16 +219,19 @@ def allowed_file_filesize(filesize):
 
 @app.route('/upload-file',methods=["GET","POST"])
 def upload_SAP():
+    
     if request.method == "POST":
 
+        
+        print(request.cookies.to_dict())
         if request.files:
 
-            if not allowed_file_filesize(request.cookies):
+            if not allowed_file_filesize(request.cookies.to_dict().get("filesize")):
                 print("File exceed Max limit size")
                 return redirect(request.url)
 
 
-            print(request.cookies)
+            
 
             SAPfile = request.files["SAP"]
 
@@ -240,12 +243,14 @@ def upload_SAP():
                 return redirect(request.url)
 
             else:
+
                 filename = secure_filename(SAPfile.filename)
-                #SAPfile.save(os.path.join(app.config["FILE_UPLOAD"]),filename)
+                print(os.path.join(app.config["FILE_UPLOAD"],filename))
+                SAPfile.save(os.path.join(app.config["FILE_UPLOAD"],filename))
                 print(SAPfile)
-                print(os.path.join(app.config["FILE_UPLOAD"]))
-                A = pd.read_excel(SAPfile)
-                print(A.head())
+                
+                # A = pd.read_excel(SAPfile)
+                # print(A.head())
             
             
            

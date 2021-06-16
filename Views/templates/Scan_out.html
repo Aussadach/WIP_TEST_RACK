@@ -14,10 +14,71 @@
 {% endblock stylesheets %}
 
 {% block content %}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <div class="page-header-title">
+                            <h5 class="m-b-10">Scan</h5>
+                        </div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/"><i class="feather icon-home"></i></a>
+                            </li>
+                            <li class="breadcrumb-item"><a href="javascript:">แสกนออก</a></li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] End -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class='row'>
+                    <div class='col-sm-12'>
+                        <div class="card">
+                        <div class='card-header'>
+                            <h5>Barcode Scanner</h5>
+
+                        </div>
+                        <div class="card-block">
+                            <div class="Scan-Form">
+                                <div class="Scan-Form-Input">
+                            <h5>แสกน Barocode กระบะที่ต้องการนำออก
+                            </h5>
+                            <label for="Rack-Barcode">Rack Barcode</label>
+                            <input type="text" class="form-control" id="Rack-Barcode" placeholder="Scan Rack" maxlength="8" autofocus>
+                        </br>
+                            <div class="col-md-12 text-center">
+                                <button type="button" class="btn btn-primary" id="Submit_scan_in">Submit</button>
+                                <button type="button" class="btn btn-warning">Clear</button>
+                                
+                                
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 {% endblock content %}
 
 {% block javascripts %}
+<script> 
+    // Make nav bar active
+    var element = document.getElementById("Unload_Nav");
+    element.classList.add("active");
 
+</script>
 {% endblock javascripts %}
