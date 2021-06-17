@@ -7,13 +7,44 @@ async function Check_Rack(Formsubmit_Json){
     },
     body :Formsubmit_Json,
 
-
     });
 
     const Is_empty = await response.json();
     console.log(Is_empty);
     return Is_empty;
 }
+
+
+
+let Popup_1_close = new Promise(function(Resolve, Reject) {
+    // "Producing Code" (May take some time)
+
+    const modal = new Promise(function(resolve, reject){
+        $('#confirmation').modal('show');
+        $('#confirmation .btn-ok').click(function(){
+            resolve("user clicked");
+        });
+        $('#confirmation .btn-danger').click(function(){
+            reject("user clicked cancel");
+        });
+        }).then(function(val){
+            //val is your returned value. argument called with resolve.
+            alert(val);
+        }).catch(function(err){
+            //user clicked cancel
+            console.log("user clicked cancel", err)
+        });
+
+               
+      
+    });
+
+
+
+
+
+
+
 
 
 document.getElementById("Submit_scan_in").onclick = function()
@@ -35,7 +66,7 @@ document.getElementById("Submit_scan_in").onclick = function()
     Check_Rack(Rack).then(empty =>{
         if(!empty['Upper_Post_Empty']){
             //Show Yes no dialog
-
+            
 
         }
         if(!empty['Lower_Post_Empty']){
@@ -48,3 +79,59 @@ document.getElementById("Submit_scan_in").onclick = function()
 
 
 }
+
+
+$(document).ready(function()
+    {
+        $('#go').click(function()
+        {   
+
+
+            let modal = new Promise(function(resolve, reject){
+            	 $('#confirmation').modal('show');
+                 $('#confirmation .btn-ok').click(function(){
+                 		resolve("user clicked");
+                 });
+                 $('#confirmation .btn-danger').click(function(){
+                 		reject("user clicked cancel");
+                 });
+            }).then(function(val){
+            		//val is your returned value. argument called with resolve.
+                alert(val);
+            }).catch(function(err){
+            	//user clicked cancel
+           		console.log("user clicked cancel", err)
+            });
+        })
+    });
+
+async function Check_click_upper_rack() {
+
+    let promise = new Promise((function(resolve, reject){
+        $('#confirmation').modal('show');
+        $('#confirmation .btn-ok').click(function(){
+                resolve("user clicked");
+        });
+        $('#confirmation .btn-danger').click(function(){
+                reject("user clicked cancel");
+        });
+         }) );
+    
+    let result = await promise; // wait until the promise resolves (*)
+    
+    alert(result); // "done!"
+    }
+    
+
+async function f() {
+
+    let promise = new Promise((resolve, reject) => {
+        setTimeout(() => resolve("done!"), 1000)
+    });
+    
+    let result = await promise; // wait until the promise resolves (*)
+    
+    alert(result); // "done!"
+    }
+    
+    f();
