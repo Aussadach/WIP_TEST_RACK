@@ -191,12 +191,13 @@ def handle_Rack():
 
 
 
-@app.route('/Check_Rack_Empty', methods=['GET'])
-def Check_Rack_Empty():
+@app.route('/Check_Rack_Empty/<Rack>', methods=['GET'])
+def Check_Rack_Empty(Rack):
         try :
-            body = request.get_json()
-            Rack1 = body['Rack_Id'] + 'T'
-            Rack2 = body['Rack_Id'] + 'B'
+    
+            print(Rack)
+            Rack1 = Rack + 'T'
+            Rack2 = Rack + 'B'
             Position1 = Test.query.filter_by(RACK_ID=Rack1).first()
             Position2 = Test.query.filter_by(RACK_ID=Rack2).first()
 
@@ -209,8 +210,9 @@ def Check_Rack_Empty():
             else :
                 Pos2_empty = False
 
-            res = { "Upper_Post_Empty" : Pos1_empty,
-            
+            res = { "Upper_Batch" :Position1.Batch,
+                    "Lower_Batch" :Position2.Batch,
+                    "Upper_Post_Empty" : Pos1_empty,
                     "Lower_Post_Empty" : Pos2_empty
 
             }

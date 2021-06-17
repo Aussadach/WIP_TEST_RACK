@@ -1,18 +1,116 @@
-async function Check_Rack(Formsubmit_Json){
-    const response = await fetch('/Check_Rack_Empty',{method: "GET",
-    headers:{   // the content type header value is usually auto-set
-                // depending on the request body
-        "Content-Type": "text/plain;charset=UTF-8"
+// 1.Get value from sumbmit
 
-    },
-    body :Formsubmit_Json,
 
+// 2.Check Rack from value
+function get_current_rack_data(Formsummit){
+    var Rack = Formsummit['Rack_Id']
+    const res = fetch(`/Check_Rack_Empty/${Rack}`,{method: "GET",
+                        headers:{  
+                                    "Content-Type": "text/plain;charset=UTF-8"
+                                },
+                        }).then(response => response.json());
+    return res
+}
+
+// 3.if value.1 is 0 show modal 1
+
+
+
+
+
+// 4.wait user answer modal popup 1
+function modal_get_answer(){
+
+    $('#confirmation .btn-ok').click(function(){
+        return(true);
     });
 
-    const Is_empty = await response.json();
-    console.log(Is_empty);
-    return Is_empty;
+
+
+    $('#confirmation .btn-danger').click(function(){
+        return(false);
+    });
+
+
 }
+
+// 5.if value.2 is 0 show modal 2
+
+
+
+// 6.wait user answer modal popup 2
+
+
+// 7.if modal1 is 1 and modal 1 is 1 -> sumbmit
+
+
+//   esle if 1 0 -> submit 1
+
+
+
+//   else if 0 1 -> submit 2
+
+
+
+
+
+//   else if 0 0 -> cancel 
+
+async function submit_Rack(formdata){
+    var Rack = "";
+    var Upper_Batch = "";
+    var Lower_Batch = "";
+
+
+    RacK_free = await get_current_rack_data(Rack);
+
+    //if value.1 is 0 show modal 1
+    if(!RacK_free.res.Lower_Post_Empty && (RacK_free.res.Lower_Batch != Lower_Batch)){
+        // doconfirm
+        // Modified modal
+        //Modal 1 launch Chage id later
+        $('#confirmation').modal('show');
+        // await
+        replace1 = await modal_get_answer();
+
+        $('#confirmation').modal('hide');
+
+    } 
+
+    if(!RacK_free.res.Upper_Post_Empty && (RacK_free.res.Upper_Batch != Upper_Batch)){
+        // doconfirm
+        //Modal 2 launch
+        $('#confirmation').modal('show');
+        // await
+        replace2 = await modal_get_answer();
+
+        $('#confirmation').modal('hide');
+
+
+    } 
+
+    
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
