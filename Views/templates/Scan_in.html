@@ -176,6 +176,30 @@
                       </div>
                     
 
+                        <!-- Modal -->
+                    <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="ConfirmModalTitle">Please Confirm </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                             <p>Rack Not empty please confirm to replace the current batch</p>
+                             <p>Rack Number: <span id = "RackID"></span></p>
+                             <p>Current Batch : <span id = "CurrentBatch"></span></p>
+                             <p>New Batch : <span id = "NewBatch"></span></p>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
 
 
 
@@ -207,8 +231,8 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-<script src="{{ url_for('static',filename = 'JS/Rack_submit.js') }}"></script>
-
+<!-- <script src="{{ url_for('static',filename = 'JS/Rack_submit.js') }}"></script> -->
+<script src="{{ url_for('static',filename = 'JS/Rack_submit_new.js') }}"></script>
 <script> 
     // Make nav bar active
     var element = document.getElementById("Load_Nav");
@@ -229,5 +253,5 @@
 
     </script> -->
 
-<script src="{{ url_for('static',filename = 'JS/Test.js') }}"></script>
+<!-- <script src="{{ url_for('static',filename = 'JS/Test.js') }}"></script> -->
 {% endblock javascripts %}

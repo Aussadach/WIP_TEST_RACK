@@ -3,8 +3,8 @@
 
 // 2.Check Rack from value
 function get_current_rack_data(Formsummit){
-    var Rack = Formsummit['Rack_Id']
-    const res = fetch(`/Check_Rack_Empty/${Rack}`,{method: "GET",
+    
+    const res = fetch(`/Check_Rack_Empty/${Formsummit}`,{method: "GET",
                         headers:{  
                                     "Content-Type": "text/plain;charset=UTF-8"
                                 },
@@ -20,16 +20,16 @@ function get_current_rack_data(Formsummit){
 
 // 4.wait user answer modal popup 1
 function modal_get_answer(){
+    return new Promise(function(resolve, reject){
+        
+        $('#confirmation .btn-ok').click(function(){
+            resolve(true);
+        });
+        $('#confirmation .btn-danger').click(function(){
+            reject(false);
+        });
+        });
 
-    $('#confirmation .btn-ok').click(function(){
-        return(true);
-    });
-
-
-
-    $('#confirmation .btn-danger').click(function(){
-        return(false);
-    });
 
 
 }
@@ -45,6 +45,23 @@ function modal_get_answer(){
 
 
 //   esle if 1 0 -> submit 1
+function put_rack(object){
+    
+    const res = fetch(`/Rack`,{method: "PUT",
+                        headers:{  
+                                    "Content-Type": "text/plain;charset=UTF-8"
+                                },
+                        body:
+
+                            JSON.stringify(object)
+
+
+                        
+                        }).then(response => response.json())
+                        .then(data => console.log(data))
+                        .catch(err => console.log(err));
+    return res
+}
 
 
 
@@ -56,50 +73,93 @@ function modal_get_answer(){
 
 //   else if 0 0 -> cancel 
 
-async function submit_Rack(formdata){
-    var Rack = "";
-    var Upper_Batch = "";
-    var Lower_Batch = "";
+async function submit_Rack(){
+    var Rack = $('#Rack-Barcode').val();
+    var Upper_Batch = $('#Lot-Barcode1').val();
+    var Lower_Batch = $('#Lot-Barcode1').val();
+    var place1 =true;
+    var place2 =true;
+
+    var Rack_free = await get_current_rack_data(Rack);
+    console.log(Rack_free)
+
+    if(!Rack_free.res.Upper_Post_Empty && (Rack_free.res.Upper_Batch != Upper_Batch)){
+        // doconfirm
+        $('#RackID').html(Rack+"T")
+        $('#CurrentBatch').html(Rack_free.res.Upper_Batch)
+        $('#NewBatch').html(Upper_Batch)
+        //Modal 2 launch
+        $('#ConfirmModal').modal('show');
+        // await
+        place1 = await modal_get_answer();
+
+        $('#ConfirmModal').modal('hide');
 
 
-    RacK_free = await get_current_rack_data(Rack);
+    } 
+
 
     //if value.1 is 0 show modal 1
-    if(!RacK_free.res.Lower_Post_Empty && (RacK_free.res.Lower_Batch != Lower_Batch)){
+    if(!Rack_free.res.Lower_Post_Empty && (Rack_free.res.Lower_Batch != Lower_Batch)){
         // doconfirm
-        // Modified modal
+        $('#RackID').html(Rack+"B")
+        $('#CurrentBatch').html(Rack_free.res.Lower_Batch)
+        $('#NewBatch').html(Lower_Batch)
+
+        
         //Modal 1 launch Chage id later
-        $('#confirmation').modal('show');
+        $('#ConfirmModal').modal('show');
         // await
-        replace1 = await modal_get_answer();
+        place2 = await modal_get_answer();
 
-        $('#confirmation').modal('hide');
+        $('#ConfirmModal').modal('hide');
 
     } 
 
-    if(!RacK_free.res.Upper_Post_Empty && (RacK_free.res.Upper_Batch != Upper_Batch)){
-        // doconfirm
-        //Modal 2 launch
-        $('#confirmation').modal('show');
-        // await
-        replace2 = await modal_get_answer();
 
-        $('#confirmation').modal('hide');
+    $('#exampleModalCenter').modal('show');
+    if(place1 && place2){
+
+        await put_rack({
+            "Rack_Id" : Rack,
+            "Up_Barcode" : Upper_Batch,
+            "Down_Barcode": Lower_Batch
+        })
+
+    }
+    else if(place1 && !place2){
+
+        await put_rack({
+            "Rack_Id" : Rack,
+            "Up_Barcode" : Upper_Batch,
+            "Down_Barcode": ""
+        })
 
 
-    } 
+    }
+    else if(!place1 && place2){
 
-    
+        await put_rack({
+            "Rack_Id" : Rack,
+            "Up_Barcode" : "",
+            "Down_Barcode": Lower_Batch
+        })
 
 
-
-
-
-
-
+    }
+    $('#exampleModalCenter').modal('hide');
+    $('#Success_Modal').modal('show')
 
 }
 
+$(document).ready(function(){
+
+
+    $("#Submit_scan_in").on('click',submit_Rack);
+
+}
+
+)
 
 
 
@@ -107,35 +167,28 @@ async function submit_Rack(formdata){
 
 
 
+// let Popup_1_close = new Promise(function(Resolve, Reject) {
+//     // "Producing Code" (May take some time)
 
-
-
-
-
-
-
-let Popup_1_close = new Promise(function(Resolve, Reject) {
-    // "Producing Code" (May take some time)
-
-    const modal = new Promise(function(resolve, reject){
-        $('#confirmation').modal('show');
-        $('#confirmation .btn-ok').click(function(){
-            resolve("user clicked");
-        });
-        $('#confirmation .btn-danger').click(function(){
-            reject("user clicked cancel");
-        });
-        }).then(function(val){
-            //val is your returned value. argument called with resolve.
-            alert(val);
-        }).catch(function(err){
-            //user clicked cancel
-            console.log("user clicked cancel", err)
-        });
+//     const modal = new Promise(function(resolve, reject){
+//         $('#confirmation').modal('show');
+//         $('#confirmation .btn-ok').click(function(){
+//             resolve("user clicked");
+//         });
+//         $('#confirmation .btn-danger').click(function(){
+//             reject("user clicked cancel");
+//         });
+//         }).then(function(val){
+//             //val is your returned value. argument called with resolve.
+//             alert(val);
+//         }).catch(function(err){
+//             //user clicked cancel
+//             console.log("user clicked cancel", err)
+//         });
 
                
       
-    });
+//     });
 
 
 
@@ -145,91 +198,92 @@ let Popup_1_close = new Promise(function(Resolve, Reject) {
 
 
 
-document.getElementById("Submit_scan_in").onclick = function()
-{
-    var Rack = document.getElementById("Rack-Barcode").value;
-    var Barcode1 = document.getElementById("Lot-Barcode1").value;
-    var Barcode2 = document.getElementById("Lot-Barcode2").value;
-    var data = {
-        "Rack_Id": Rack,
-        "Up_Barcode": Barcode1,
-        "Down_Barcode": Barcode2,
+// document.getElementById("Submit_scan_in").onclick = function()
+// {
+//     var Rack = document.getElementById("Rack-Barcode").value;
+//     var Barcode1 = document.getElementById("Lot-Barcode1").value;
+//     var Barcode2 = document.getElementById("Lot-Barcode2").value;
+//     var data = {
+//         "Rack_Id": Rack,
+//         "Up_Barcode": Barcode1,
+//         "Down_Barcode": Barcode2,
         
-        };
+//         };
 
     
-    console.log(JSON.stringify(data))
-    document.getElementById("exampleModalCenter").modal('show');
+//     console.log(JSON.stringify(data))
+//     document.getElementById("exampleModalCenter").modal('show');
     
-    Check_Rack(Rack).then(empty =>{
-        if(!empty['Upper_Post_Empty']){
-            //Show Yes no dialog
+//     Check_Rack(Rack).then(empty =>{
+//         if(!empty['Upper_Post_Empty']){
+//             //Show Yes no dialog
             
 
-        }
-        if(!empty['Lower_Post_Empty']){
-            //Show Yes no dialog
+//         }
+//         if(!empty['Lower_Post_Empty']){
+//             //Show Yes no dialog
 
 
-        }
+//         }
 
-    })
-
-
-}
+//     })
 
 
-$(document).ready(function()
-    {
-        $('#go').click(function()
-        {   
+// }
 
 
-            let modal = new Promise(function(resolve, reject){
-            	 $('#confirmation').modal('show');
-                 $('#confirmation .btn-ok').click(function(){
-                 		resolve("user clicked");
-                 });
-                 $('#confirmation .btn-danger').click(function(){
-                 		reject("user clicked cancel");
-                 });
-            }).then(function(val){
-            		//val is your returned value. argument called with resolve.
-                alert(val);
-            }).catch(function(err){
-            	//user clicked cancel
-           		console.log("user clicked cancel", err)
-            });
-        })
-    });
+// $(document).ready(function()
+//     {
+//         $('#go').click(function()
+//         {   
 
-async function Check_click_upper_rack() {
 
-    let promise = new Promise((function(resolve, reject){
-        $('#confirmation').modal('show');
-        $('#confirmation .btn-ok').click(function(){
-                resolve("user clicked");
-        });
-        $('#confirmation .btn-danger').click(function(){
-                reject("user clicked cancel");
-        });
-         }) );
+//             let modal = new Promise(function(resolve, reject){
+//             	 $('#confirmation').modal('show');
+//                  $('#confirmation .btn-ok').click(function(){
+//                  		resolve("user clicked");
+//                  });
+//                  $('#confirmation .btn-danger').click(function(){
+//                  		reject("user clicked cancel");
+//                  });
+//             }).then(function(val){
+//             		//val is your returned value. argument called with resolve.
+//                 alert(val);
+//             }).catch(function(err){
+//             	//user clicked cancel
+//            		console.log("user clicked cancel", err)
+//             });
+//         })
+//     });
+
+// async function Check_click_upper_rack() {
+
+//     let promise = new Promise((function(resolve, reject){
+//         $('#confirmation').modal('show');
+//         $('#confirmation .btn-ok').click(function(){
+//                 resolve("user clicked");
+//         });
+//         $('#confirmation .btn-danger').click(function(){
+//                 reject("user clicked cancel");
+//         });
+//          }) );
     
-    let result = await promise; // wait until the promise resolves (*)
+//     let result = await promise; // wait until the promise resolves (*)
     
-    alert(result); // "done!"
-    }
+//     alert(result); // "done!"
+//     }
     
 
-async function f() {
+// async function f() {
 
-    let promise = new Promise((resolve, reject) => {
-        setTimeout(() => resolve("done!"), 1000)
-    });
+//     let promise = new Promise((resolve, reject) => {
+//         setTimeout(() => resolve("done!"), 1000)
+//     });
     
-    let result = await promise; // wait until the promise resolves (*)
+//     let result = await promise; // wait until the promise resolves (*)
     
-    alert(result); // "done!"
-    }
+//     alert(result); // "done!"
+//     }
     
-    f();
+//     f();
+
