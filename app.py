@@ -5,6 +5,7 @@ from flask_socketio import SocketIO ,emit
 from Model.Model import join_table
 import pandas as pd
 import os
+from datetime import datetime
 
 from werkzeug.utils import secure_filename
 
@@ -40,6 +41,7 @@ class Test(db.Model):
     BR_AQL = db.Column('BR_AQL',db.String)
     CR_AQL = db.Column('CR_AQL',db.String)
     MJ_AQL = db.Column('MJ_AQL',db.String)
+    MN_AQL = db.Column('MN_AQL',db.String)
     PT_AQL = db.Column('PT_AQL',db.String)
     Remark = db.Column('Remark',db.String)
     Remark2 = db.Column('Remark2',db.String)
@@ -95,6 +97,7 @@ class Test(db.Model):
             'BR_AQL' : self.BR_AQL,
             'CR_AQL' : self.CR_AQL,
             'MJ_AQL' : self.MJ_AQL,
+            'MN_AQL' : self.MN_AQL,
             'PT_AQL' : self.PT_AQL,
             'Remark' : self.Remark,
             'Remark2' : self.Remark2,
@@ -129,14 +132,44 @@ def Dashboard():
     return render_template('Dashboard.html')
     
 
+def remove_excel_str(data):
+    if data is not None:
+        if data[0] == "'":
+            return data[1:]
+        else :
+            return data
+    else :
+        return ""
+
+
 
 @app.route('/Test_db',methods=['GET'])
 def test():
     try:
         data = Test.query.all()
+        #data = Test.query().with_entities(Test.id, Test.RACK_ID,Test.Batch).all()
+        #data = Test.query(Test.id.label('id'),Test.RACK_ID.label('RACK_ID'),Test.Batch.label('Batch')).all()
+        #data = Test.query.with_entities(Test.id.label('id'), Test.RACK_ID.label('RACK_ID'),Test.Batch.label('Batch')).all()
+        #data = db.session.query(Test.id,Test.RACK_ID,Test.Batch)
+        
+        #df = pd.read_sql(data.statement,db.session.bind)
+        #print(df)
+        # data = db.session.query(Test.id,Test.RACK_ID,Test.Batch).filter(Test.Batch != "" , Test.Batch != " " )
+        # Rack_Df = pd.read_sql(data.statement,db.session.bind)
+        # data = Test.query.filter(Test.Batch != "" , Test.Batch != " " ).all()
+        # Rack_Df.Batch = Rack_Df.Batch.apply(remove_excel_str)
+        # print(Rack_Df)
+        # print(type(Rack_Df))
+        # print(Rack_Df.columns)
+        #print("A")
+        #Query_to_df = db.session.query(Test.id,Test.RACK_ID,Test.Batch).filter(Test.Batch != "" , Test.Batch != " " )
+        #Rack_Df = pd.read_sql(Query_to_df.statement,db.session.bind)
+
+        
         json_dat = [i.to_json() for i in data]
         
-        # print(json_dat)
+        
+        #print(json_dat)
         return jsonify(json_dat)
 
     except Exception as e:
@@ -159,18 +192,21 @@ def handle_Rack():
     elif request.method == 'PUT':
          try :
             body = request.get_json()
+            print(body)
             if body is not None:
                 print(body)
                 Rack1 = body['Rack_Id'] + 'T'
                 Rack2 = body['Rack_Id'] + 'B'
                 Barcode1 = body['Up_Barcode']
                 Barcode2 = body['Down_Barcode']
-
-                Position1 = Test.query.filter_by(RACK_ID=Rack1).first()
-                Position1.Batch = Barcode1 
-                Position2 = Test.query.filter_by(RACK_ID=Rack2).first()
-                Position2.Batch = Barcode2
-
+                if Barcode1 != "":
+                    Position1 = Test.query.filter_by(RACK_ID=Rack1).first()
+                    Position1.Batch = Barcode1
+                    Position1.Time = datetime.now() 
+                if Barcode2 != "":
+                    Position2 = Test.query.filter_by(RACK_ID=Rack2).first()
+                    Position2.Batch = Barcode2
+                    Position1.Time = datetime.now() 
 
 
                 db.session.commit()
@@ -180,7 +216,7 @@ def handle_Rack():
                 # db.session.commit()
                 
                 
-                return {"message" : "Got data" , "body" : body} , 200
+                return {"message" : "Submited data" , "body" : body} , 200
 
          except Exception as e:
 
@@ -201,11 +237,11 @@ def Check_Rack_Empty(Rack):
             Position1 = Test.query.filter_by(RACK_ID=Rack1).first()
             Position2 = Test.query.filter_by(RACK_ID=Rack2).first()
 
-            if Position1.Batch == "":
+            if (Position1.Batch == "" or Position1.Batch == " "):
                 Pos1_empty = True
             else :
                 Pos1_empty = False
-            if Position2.Batch == "":
+            if (Position2.Batch == "" or Position2.Batch == " "):
                 Pos2_empty = True
             else :
                 Pos2_empty = False
@@ -260,6 +296,197 @@ def allowed_file_filesize(filesize):
     else:
         return False
 
+def Rack_data_to_json(data):
+
+
+    return {'id' : data.id,
+        'RACK_ID': data.RACK_ID,
+        'Batch' : data.Batch,
+        'GRTP' : data.GRTP,
+        'SLOC' : data.SLOC,
+        'Copyform' : data.Copyform,
+        'Cline' : data.Cline,
+        'Cdate' : data.Cdate,
+        'Date_QC' : data.Date_QC,
+        'Weight' : data.Weight,
+        'QC_Total' : data.QC_Total,
+        'BR_AQL' : data.BR_AQL,
+        'CR_AQL' : data.CR_AQL,
+        'MJ_AQL' : data.MJ_AQL,
+        'MN_AQL' : data.MN_AQL,
+        'PT_AQL' : data.PT_AQL,
+        'Remark' : data.Remark,
+        'Remark2' : data.Remark2,
+        'Remark_production_' : data.Remark_production_,
+        'Expired_6_Month' : data.Expired_6_Month,
+        'Ready_PCS_UR': data.Ready_PCS_UR,
+        'Blocked' : data.Blocked,
+        'Wait_to_Check' : data.Wait_to_Check,
+        'Status': data.Status,
+        'Time' : data.Time,
+        'Updated_Time' : data.Updated_Time
+    }
+
+
+
+
+def pandas_merge_data(SAPdata):
+    Data_sheet =  pd.DataFrame()
+    Data_sheet['Batch'] = SAPdata['Batch']
+    Data_sheet['GRTP'] = SAPdata['Material Number (Material Description)']
+    Data_sheet['SLOC'] = SAPdata['Stor. Loc.']
+    Data_sheet['Copyform'] = SAPdata['Original Batch']
+    Data_sheet['Cline'] = SAPdata['Production Line']
+    Data_sheet['Cdate'] = SAPdata['Production Date']
+    Data_sheet['Date_QC'] = SAPdata['Date of last goods receipt']
+    Data_sheet['Weight'] = SAPdata['Weight per Batch']
+    Data_sheet['QC_Total'] = SAPdata['QC-Total Decision']
+    Data_sheet['BR_AQL'] = SAPdata['BR-AQL']
+    Data_sheet['CR_AQL'] = SAPdata['CR-AQL']
+    Data_sheet['MJ_AQL'] = SAPdata['MJ-AQL']
+    Data_sheet['MN_AQL'] = SAPdata['MN-AQL']
+    Data_sheet['PT_AQL'] = SAPdata['PT-AQL']
+    Data_sheet['Remark'] = SAPdata['Remarks (QC1)']
+    Data_sheet['Remark2'] = SAPdata['Remarks (QC2)']
+    Data_sheet['Remark_production_'] = SAPdata['Remarks (Production)']
+    Data_sheet['Expired_6_Month'] = SAPdata['Shelf Life Expiration Date']
+    Data_sheet['Ready_PCS_UR'] = SAPdata['Unrestricted']
+    Data_sheet['Blocked'] = SAPdata['Blocked']
+    Data_sheet['Wait_to_Check'] = SAPdata['Quality Insp.']
+    # data = db.session.query(Test.id,Test.RACK_ID,Test.Batch)
+    # Rack_Df = pd.read_sql(data.statement,db.session.bind)
+    # print(Rack_Df)
+
+
+    # data = Test.query.filter(Test.Batch != "" , Test.Batch != " " ).all()
+    # json_dat = [i.to_json() for i in data]
+    # Rack_Df = pd.DataFrame(json_dat)
+    # drop_column =['GRTP','SLOC','Copyform','Cline','Cdate','Date_QC','Weight','QC_Total','BR_AQL','CR_AQL','MJ_AQL','MN_AQL','PT_AQL','Remark','Remark2','Remark_production_','Expired_6_Month','Ready_PCS_UR','Blocked','Wait_to_Check','Status','Time','Updated_Time'] 
+    # Rack_Df.drop(drop_column,axis=1,inplace= True)
+    #print(A)
+        
+    ##########3#old that work
+    # Query_to_df = db.session.query(Test.id,Test.RACK_ID,Test.Batch).filter(Test.Batch != "" , Test.Batch != " " )
+    # Rack_Df = pd.read_sql(Query_to_df.statement,db.session.bind)
+    # data = Test.query.filter(Test.Batch != "" , Test.Batch != " " ).all()
+
+    
+        
+
+    # Rack_Df4 = pd.DataFrame([Rack_data_to_json(i) for i in data])
+    # print(Rack_Df4)
+    #drop_column =['GRTP','SLOC','Copyform','Cline','Cdate','Date_QC','Weight','QC_Total','BR_AQL','CR_AQL','MJ_AQL','MN_AQL','PT_AQL','Remark','Remark2','Remark_production_','Expired_6_Month','Ready_PCS_UR','Blocked','Wait_to_Check','Status','Time','Updated_Time']
+    #Rack_Df4.drop(drop_column,axis=1,inplace= True)
+    # Rack_Df = pd.DataFrame(json_dat)
+
+
+
+    data = db.session.query(Test).filter(Test.Batch != "" , Test.Batch != " " ).all()
+    Rack_Df = pd.DataFrame([Rack_data_to_json(i) for i in data])
+    drop_column =['GRTP','SLOC','Copyform','Cline','Cdate','Date_QC','Weight','QC_Total','BR_AQL','CR_AQL','MJ_AQL','MN_AQL','PT_AQL','Remark','Remark2','Remark_production_','Expired_6_Month','Ready_PCS_UR','Blocked','Wait_to_Check','Status','Time','Updated_Time'] 
+    Rack_Df.drop(drop_column,axis=1,inplace= True)
+    #print(Rack_Df)
+
+    Rack_Df.Batch = Rack_Df.Batch.apply(remove_excel_str)
+    # print(Rack_Df)
+    # print(type(Rack_Df))
+    # print(Rack_Df.columns)
+    #Rack_data = Test.query.all()
+    #json_dat = [i.to_json() for i in Rack_data]
+    #Rack_Df = pd.DataFrame(json_dat)
+    Left_join = pd.merge(Rack_Df,  
+                        Data_sheet,  
+                        left_on ='Batch',
+                        right_on ='Batch',
+                        how ='left')
+    Left_join.fillna('', inplace=True)
+
+    print(Left_join)
+    #data = Test.query.filter(Test.Batch != "" , Test.Batch != " " ).all()
+    #data = db.session.query(Test).filter(Test.Batch != "" , Test.Batch != " " ).all()
+    #print(data)
+    #print(type(data))
+    for i in data:
+        # print(i)
+        # print(i.Batch)
+        Current_batch = Left_join.loc[Left_join['Batch'] == remove_excel_str(i.Batch)]
+        if not Current_batch.empty:
+            
+            # print(Current_batch)
+
+            # print(Current_batch.shape)
+            # print(Current_batch['GRTP'].head(1))
+            # print(Current_batch.iloc[0]['GRTP'])
+            # print(Current_batch.iloc[0]['Cdate'])
+            # print(type(Current_batch.iloc[0]['Cdate']))
+
+
+            i.GRTP = Current_batch.iloc[0]['GRTP']
+            i.SLOC = Current_batch.iloc[0]['SLOC']
+            i.Copyform = Current_batch.iloc[0]['Copyform']
+            i.Cline = Current_batch.iloc[0]['Cline']
+            if Current_batch.iloc[0]['Cdate'] == '' :
+                
+                i.Cdate = None
+            else :
+                # date_time_str = Current_batch.iloc[0]['Cdate'].to_string()
+                # date_time_obj = datetime.strptime(date_time_str, '%d/%m/%Y')
+                # A = date_time_obj.strftime('%Y-%m-%d %H:%M:%S')
+                # i.Cdate = A
+                #print(Current_batch.iloc[0]['Cdate'])
+                i.Cdate = Current_batch.iloc[0]['Cdate']
+            #print(i.Cdate)
+            if Current_batch.iloc[0]['Date_QC'] is '' :
+                i.Date_QC = None
+
+            else :
+                # date_time_str = Current_batch.iloc[0]['Date_QC'].to_string()
+                # date_time_obj = datetime.strptime(date_time_str, '%d/%m/%Y')
+                # A = date_time_obj.strftime('%Y-%m-%d %H:%M:%S')
+                # i.Date_QC = A
+                i.Date_QC = Current_batch.iloc[0]['Date_QC']
+
+            
+            i.Weight = Current_batch.iloc[0]['Weight']
+            i.QC_Total = Current_batch.iloc[0]['QC_Total']
+            i.BR_AQL = Current_batch.iloc[0]['BR_AQL']
+            i.CR_AQL = Current_batch.iloc[0]['CR_AQL']
+            i.MJ_AQL = Current_batch.iloc[0]['MJ_AQL']
+            i.MN_AQL = Current_batch.iloc[0]['MN_AQL']
+            i.PT_AQL = Current_batch.iloc[0]['PT_AQL']
+            i.Remark = Current_batch.iloc[0]['Remark']
+            i.Remark2 = Current_batch.iloc[0]['Remark2']
+            i.Remark_production_ = Current_batch.iloc[0]['Remark_production_']
+
+            if Current_batch.iloc[0]['Expired_6_Month'] is '' :
+                i.Expired_6_Month = None
+            else :
+                # date_time_str = Current_batch.iloc[0]['Expired_6_Month'].to_string()
+                # date_time_obj = datetime.strptime(date_time_str, '%d/%m/%Y')
+                # A = date_time_obj.strftime('%Y-%m-%d %H:%M:%S')
+                # i.Expired_6_Month = A
+                i.Expired_6_Month = Current_batch.iloc[0]['Expired_6_Month']
+            if Current_batch.iloc[0]['Ready_PCS_UR'] is '' :
+                i.Ready_PCS_UR = None
+            else:
+                i.Ready_PCS_UR = Current_batch.iloc[0]['Ready_PCS_UR']
+
+            i.Blocked = Current_batch.iloc[0]['Blocked']
+            i.Wait_to_Check = Current_batch.iloc[0]['Wait_to_Check']
+            #print(i)
+            i.Updated_Time = datetime.now()
+
+        else :
+            print("not found")
+    db.session.commit()
+    #print("comitting")
+    
+
+
+
+    #print(Left_join)
+
+
 
 @app.route('/upload-file',methods=["GET","POST"])
 def upload_SAP():
@@ -295,27 +522,34 @@ def upload_SAP():
                 ext = SAPfile.filename.rsplit(".",1)[1]
                 if ext.upper() == "XLSX":
                     SAP_df = pd.read_excel(SAPfile)
-                    SAP_df.to_pickle(os.path.join(app.config["FILE_UPLOAD"],"SAP_df_pickle.pkl"))
+                    #SAP_df.to_pickle(os.path.join(app.config["FILE_UPLOAD"],"SAP_df_pickle.pkl"))
+                    print(datetime.now())
+                    pandas_merge_data(SAP_df)
                     print("SAP_data saved")
-
+                    print(datetime.now())
                     return {"message" : "Success"} , 200
+
 
                 elif ext.upper() == "CSV":
                     SAP_df = pd.read_csv(SAPfile)
-                    SAP_df.to_pickle(os.path.join(app.config["FILE_UPLOAD"],"SAP_df_pickle.pkl"))
+                    #SAP_df.to_pickle(os.path.join(app.config["FILE_UPLOAD"],"SAP_df_pickle.pkl"))
+                    print(datetime.now())
+                    pandas_merge_data(SAP_df)
                     print("SAP_data saved")
+                    print(datetime.now())
 
                     return {"message" : "Success"} , 200
+
                 else :
                     print("Failed")
                     
-            
+
 
 
             return redirect(request.url)
 
 
-    return render_template('Upload_SAP.html')
+    return render_template('Upload_SAPwithJs.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

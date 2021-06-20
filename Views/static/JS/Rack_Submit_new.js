@@ -19,14 +19,29 @@ function get_current_rack_data(Formsummit){
 
 
 // 4.wait user answer modal popup 1
-function modal_get_answer(){
+function modal_get_answer1(){
     return new Promise(function(resolve, reject){
         
-        $('#confirmation .btn-ok').click(function(){
+        $('#ConfirmModal1 .btn-ok').click(function(){
             resolve(true);
         });
-        $('#confirmation .btn-danger').click(function(){
-            reject(false);
+        $('#ConfirmModal1 .btn-danger').click(function(){
+            resolve(false);
+        });
+        });
+
+
+
+}
+
+function modal_get_answer2(){
+    return new Promise(function(resolve, reject){
+        
+        $('#ConfirmModal2 .btn-ok').click(function(){
+            resolve(true);
+        });
+        $('#ConfirmModal2 .btn-danger').click(function(){
+            resolve(false);
         });
         });
 
@@ -46,14 +61,12 @@ function modal_get_answer(){
 
 //   esle if 1 0 -> submit 1
 function put_rack(object){
-    
-    const res = fetch(`/Rack`,{method: "PUT",
+    console.log(object)
+    const res = fetch('/Rack',{method: "PUT",
                         headers:{  
-                                    "Content-Type": "text/plain;charset=UTF-8"
+                                    'Content-Type': 'application/json'
                                 },
-                        body:
-
-                            JSON.stringify(object)
+                        body: JSON.stringify(object)
 
 
                         
@@ -79,21 +92,22 @@ async function submit_Rack(){
     var Lower_Batch = $('#Lot-Barcode1').val();
     var place1 =true;
     var place2 =true;
-
+    $('#exampleModalCenter').modal('show');
     var Rack_free = await get_current_rack_data(Rack);
     console.log(Rack_free)
-
+    $('#exampleModalCenter').modal('hide');
     if(!Rack_free.res.Upper_Post_Empty && (Rack_free.res.Upper_Batch != Upper_Batch)){
         // doconfirm
-        $('#RackID').html(Rack+"T")
-        $('#CurrentBatch').html(Rack_free.res.Upper_Batch)
-        $('#NewBatch').html(Upper_Batch)
+        $('#RackID1').html(Rack+"T")
+        $('#CurrentBatch1').html(Rack_free.res.Upper_Batch)
+        $('#NewBatch1').html(Upper_Batch)
         //Modal 2 launch
-        $('#ConfirmModal').modal('show');
+        $('#ConfirmModal1').modal('show');
         // await
-        place1 = await modal_get_answer();
+        place1 = await modal_get_answer1();
 
-        $('#ConfirmModal').modal('hide');
+        console.log(place1)
+        $('#ConfirmModal1').modal('hide');
 
 
     } 
@@ -102,24 +116,25 @@ async function submit_Rack(){
     //if value.1 is 0 show modal 1
     if(!Rack_free.res.Lower_Post_Empty && (Rack_free.res.Lower_Batch != Lower_Batch)){
         // doconfirm
-        $('#RackID').html(Rack+"B")
-        $('#CurrentBatch').html(Rack_free.res.Lower_Batch)
-        $('#NewBatch').html(Lower_Batch)
+        console.log("2nd task")
+        $('#RackID2').html(Rack+"B")
+        $('#CurrentBatch2').html(Rack_free.res.Lower_Batch)
+        $('#NewBatch2').html(Lower_Batch)
 
         
         //Modal 1 launch Chage id later
-        $('#ConfirmModal').modal('show');
+        $('#ConfirmModal2').modal('show');
         // await
-        place2 = await modal_get_answer();
+        place2 = await modal_get_answer2();
 
-        $('#ConfirmModal').modal('hide');
+        $('#ConfirmModal2').modal('hide');
 
     } 
 
 
     $('#exampleModalCenter').modal('show');
     if(place1 && place2){
-
+        
         await put_rack({
             "Rack_Id" : Rack,
             "Up_Barcode" : Upper_Batch,
@@ -149,6 +164,7 @@ async function submit_Rack(){
     }
     $('#exampleModalCenter').modal('hide');
     $('#Success_Modal').modal('show')
+    $("#SubmitBatch")[0].reset();
 
 }
 

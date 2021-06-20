@@ -52,7 +52,7 @@
                                 <div class="Scan-Form-Input">
                             <h5>แสกน Barocode บริเวณ Rack
                             </h5>
-                            <form>
+                            <form id="SubmitBatch">
                             <label for="Rack-Barcode">Rack Barcode</label>
                             <input type="text" class="form-control" id="Rack-Barcode" placeholder="Scan Rack" maxlength="8" autofocus>
                         </br>
@@ -177,28 +177,53 @@
                     
 
                         <!-- Modal -->
-                    <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal fade" id="ConfirmModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="ConfirmModalTitle">Please Confirm </h5>
+                            <h5 class="modal-title" id="ConfirmModalTitle1">Please Confirm </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             </div>
                             <div class="modal-body">
                              <p>Rack Not empty please confirm to replace the current batch</p>
-                             <p>Rack Number: <span id = "RackID"></span></p>
-                             <p>Current Batch : <span id = "CurrentBatch"></span></p>
-                             <p>New Batch : <span id = "NewBatch"></span></p>
+                             <p>Rack Number: <span id = "RackID1"></span></p>
+                             <p>Current Batch : <span id = "CurrentBatch1"></span></p>
+                             <p>New Batch : <span id = "NewBatch1"></span></p>
                             </div>
                             <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-ok" id = "Yesbtn1">Yes</button>
+                            <button type="button" class="btn btn-danger" id = "Nobtn1">No</button>
                             </div>
                         </div>
                         </div>
                     </div>
+
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="ConfirmModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="ConfirmModalTitle2">Please Confirm </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>
+                                <div class="modal-body">
+                                 <p>Rack Not empty please confirm to replace the current batch</p>
+                                 <p>Rack Number: <span id = "RackID2"></span></p>
+                                 <p>Current Batch : <span id = "CurrentBatch2"></span></p>
+                                 <p>New Batch : <span id = "NewBatch2"></span></p>
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-ok" id = "Yesbtn2">Yes</button>
+                                <button type="button" class="btn btn-danger" id = "Nobtn2">No</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
 
 
 

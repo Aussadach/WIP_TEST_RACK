@@ -4,7 +4,7 @@
 
 
 def join_table():
-    
+        
     pass
 
 def check_duplicated():
