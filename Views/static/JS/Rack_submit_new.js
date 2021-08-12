@@ -89,7 +89,7 @@ function put_rack(object){
 async function submit_Rack(){
     var Rack = $('#Rack-Barcode').val();
     var Upper_Batch = $('#Lot-Barcode1').val();
-    var Lower_Batch = $('#Lot-Barcode1').val();
+    var Lower_Batch = $('#Lot-Barcode2').val();
     var place1 =true;
     var place2 =true;
     $('#exampleModalCenter').modal('show');
