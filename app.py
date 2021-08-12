@@ -552,7 +552,7 @@ def upload_SAP():
     return render_template('Upload_SAPwithJs.html')
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run()
     #app.run(host='10.120.3.30', port=5000)
     #app.run(host='192.168.43.104', port=5000 )
     #app.run(host='192.168.43.104', port=5000, debug=True, threaded=False)
