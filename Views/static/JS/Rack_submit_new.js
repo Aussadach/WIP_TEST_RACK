@@ -82,7 +82,7 @@ function put_rack(object){
 
 
 
-
+const wait = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay));
 
 //   else if 0 0 -> cancel 
 
@@ -92,81 +92,106 @@ async function submit_Rack(){
     var Lower_Batch = $('#Lot-Barcode2').val();
     var place1 =true;
     var place2 =true;
-    $('#exampleModalCenter').modal('show');
-    var Rack_free = await get_current_rack_data(Rack);
-    console.log(Rack_free)
-    $('#exampleModalCenter').modal('hide');
-    if(!Rack_free.res.Upper_Post_Empty && (Rack_free.res.Upper_Batch != Upper_Batch)){
-        // doconfirm
-        $('#RackID1').html(Rack+"T")
-        $('#CurrentBatch1').html(Rack_free.res.Upper_Batch)
-        $('#NewBatch1').html(Upper_Batch)
-        //Modal 2 launch
-        $('#ConfirmModal1').modal('show');
-        // await
-        place1 = await modal_get_answer1();
-
-        console.log(place1)
-        $('#ConfirmModal1').modal('hide');
-
-
-    } 
-
-
-    //if value.1 is 0 show modal 1
-    if(!Rack_free.res.Lower_Post_Empty && (Rack_free.res.Lower_Batch != Lower_Batch)){
-        // doconfirm
-        console.log("2nd task")
-        $('#RackID2').html(Rack+"B")
-        $('#CurrentBatch2').html(Rack_free.res.Lower_Batch)
-        $('#NewBatch2').html(Lower_Batch)
-
+    
+    if(Rack && (Upper_Batch || Lower_Batch)){
+        $('#exampleModalCenter').modal('show');
+        var Rack_free = await get_current_rack_data(Rack);
+        console.log(Rack_free)
+        $('#exampleModalCenter').modal('hide');
+        if(!Rack_free.res.Upper_Post_Empty && (Rack_free.res.Upper_Batch != Upper_Batch)){
+            // doconfirm
+            $('#RackID1').html(Rack+"T")
+            $('#CurrentBatch1').html(Rack_free.res.Upper_Batch)
+            $('#NewBatch1').html(Upper_Batch)
+            //Modal 2 launch
+            $('#ConfirmModal1').modal('show');
+            // await
+            place1 = await modal_get_answer1();
+    
+            console.log(place1)
+            $('#ConfirmModal1').modal('hide');
+    
+    
+        } 
+    
+    
+        //if value.1 is 0 show modal 1
+        if(!Rack_free.res.Lower_Post_Empty && (Rack_free.res.Lower_Batch != Lower_Batch)){
+            // doconfirm
+            console.log("2nd task")
+            $('#RackID2').html(Rack+"B")
+            $('#CurrentBatch2').html(Rack_free.res.Lower_Batch)
+            $('#NewBatch2').html(Lower_Batch)
+    
+            
+            //Modal 1 launch Chage id later
+            $('#ConfirmModal2').modal('show');
+            // await
+            place2 = await modal_get_answer2();
+    
+            $('#ConfirmModal2').modal('hide');
+    
+        } 
+    
+    
+        $('#exampleModalCenter').modal('show');
+        if(place1 && place2){
+            
+            await put_rack({
+                "Rack_Id" : Rack,
+                "Up_Barcode" : Upper_Batch,
+                "Down_Barcode": Lower_Batch
+            })
+    
+        }
+        else if(place1 && !place2){
+    
+            await put_rack({
+                "Rack_Id" : Rack,
+                "Up_Barcode" : Upper_Batch,
+                "Down_Barcode": ""
+            })
+    
+    
+        }
+        else if(!place1 && place2){
+    
+            await put_rack({
+                "Rack_Id" : Rack,
+                "Up_Barcode" : "",
+                "Down_Barcode": Lower_Batch
+            })
+    
+    
+        }
         
-        //Modal 1 launch Chage id later
-        $('#ConfirmModal2').modal('show');
-        // await
-        place2 = await modal_get_answer2();
-
-        $('#ConfirmModal2').modal('hide');
-
-    } 
-
-
-    $('#exampleModalCenter').modal('show');
-    if(place1 && place2){
+    
+        await wait(500);
         
-        await put_rack({
-            "Rack_Id" : Rack,
-            "Up_Barcode" : Upper_Batch,
-            "Down_Barcode": Lower_Batch
-        })
+    
+        $('#exampleModalCenter').modal('hide');
+        $('#Success_Modal').modal('show');
+        $("#SubmitBatch")[0].reset();
+        
+    
+    
+    
+    
+    
+    }
+    else{
+        $('#Nodata_Modal').modal('show');
+        
 
     }
-    else if(place1 && !place2){
-
-        await put_rack({
-            "Rack_Id" : Rack,
-            "Up_Barcode" : Upper_Batch,
-            "Down_Barcode": ""
-        })
 
 
-    }
-    else if(!place1 && place2){
-
-        await put_rack({
-            "Rack_Id" : Rack,
-            "Up_Barcode" : "",
-            "Down_Barcode": Lower_Batch
-        })
-
-
-    }
-    $('#exampleModalCenter').modal('hide');
-    $('#Success_Modal').modal('show')
-    $("#SubmitBatch")[0].reset();
-
+   
 }
+
+
+
+
 
 $(document).ready(function(){
 
